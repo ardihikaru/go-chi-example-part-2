@@ -34,6 +34,7 @@ Global Template Repository for Development and Operations Of Your Projects.
 * [Installation](#installation)
 * [Development](#development)
 * [Usage](#usage)
+* [Swag Usage](#Swag-Usage)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -73,6 +74,30 @@ git clone git@github.com:ardihikaru/go-chi-example-part-1.git
 
 Reference and programming instructional materials.
 
+## Swag Usage
+
+- Add comments on your API handlers using the declarative syntax explained [here](https://swaggo.github.io/swaggo.io/declarative_comments_format/)
+
+-  Install [swaggo/swag](https://github.com/swaggo/swag)?
+
+```
+        go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+- Run the Swag in your Go project root folder which contains `main.go` file.
+
+``` 
+        swag init -g cmd/main/main.go
+```
+
+If your `main.go` file is not in root but uses the models defined in root, you can provide the path of `main.go` file.
+
+```
+        swag init -d "./" -g "$FOLDER_NAME/main.go"
+```
+
+Swag will parse comments and generate required files(docs folder and docs/doc.go).
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -105,3 +130,29 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
+
+## MISC
+
+* Validates CORS
+```shell
+curl -v --request OPTIONS 'http://localhost:8080/public/service-id' -H 'Origin: http://other-domain.com' -H 'Access-Control-Request-Method: GET'
+```
+```shell
+curl -v --request OPTIONS 'http://localhost:8080/auth/login' -H 'Origin: http://other-domain.com' -H 'Access-Control-Request-Method: POST'
+```
+```shell
+curl -v -X OPTIONS \
+  http://localhost:8080/public/service-id \
+  -H 'cache-control: no-cache' \
+  -F Origin=http://www.google.com
+```
+  * **Allowed** CORS result (please set `cors.Debug: true`)
+    ```shell
+    [cors] 2024/06/16 23:53:13 Handler: Preflight request
+    [cors] 2024/06/16 23:53:13 Preflight response headers: map[Access-Control-Allow-Methods:[GET] Access-Control-Allow-Origin:[http://other-domain.com] Access-Control-Max-Age:[6000] Vary:[Origin Access-Control-Request-Method Access-Control-Request-Headers]]
+    ```
+  * **NOT Allowed** CORS result (please set `cors.Debug: true`)
+    ```shell
+    [cors] 2024/06/16 23:52:13 Handler: Preflight request
+    [cors] 2024/06/16 23:52:13 Preflight aborted: origin 'http://other-domain.com' not allowed
+    ```

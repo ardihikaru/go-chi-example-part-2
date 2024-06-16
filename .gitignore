@@ -3,6 +3,20 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# resources
+_data
+!_data/.gitkeep
+config.yaml
+resources/http-client.env.json
+
+.env
+
+# compiled go file
+api-service
+
+# go vendor
+vendor/
+
 # User-specific files
 *.suo
 *.user
