@@ -1,0 +1,40 @@
+# general configuration: dev, stag, prod
+general:
+  buildMode: dev
+
+# untuk detail message log
+log:
+  level: DEBUG
+  format: json
+
+# untuk HTTP
+http:
+  address: 0.0.0.0
+  port: 8080
+  requestTimeout: 600s
+  httpClientTLS: false
+
+# untuk CORS
+cors:
+#  allowedOrigins: ["http://the-only-valid-domain.com"]
+  allowedOrigins: ["https://*", "http://*"]
+#  allowedOrigins: ["*"]
+#  allowedMethods: ["*"]
+  allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+#  allowedHeaders: ["*"]
+  allowedHeaders: ["X-PINGOTHER", "Accept", "Authorization", "Content-Type", "X-CSRF-Token"]
+#  exposedHeaders: ["*"]
+  exposedHeaders: ["Link"]
+#  allowCredentials: true
+  allowCredentials: false
+  # value=600 is the maximum value not ignored by any of major browsers
+  maxAge: 6000
+  # Debugging flag adds additional output to debug server side CORS issues
+#  Debug: false
+  Debug: true
+
+# JWT auth
+jwtAuth:
+  jwtSecret: secret
+  jwtAlgorithm: HS256
+  jwtExpiredInSec: 36000000
