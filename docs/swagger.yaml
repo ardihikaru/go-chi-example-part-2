@@ -1,0 +1,80 @@
+basePath: /
+definitions:
+  auth.LoginData:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  httputil.ErrResponse:
+    properties:
+      error: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  httputil.Response:
+    properties:
+      data: {}
+      status:
+        type: string
+      status_code:
+        type: integer
+    type: object
+info:
+  contact:
+    email: mfardiansyah.id@gmail.com
+    name: Muhammad Febrian Ardiansyah
+  description: |-
+    Sample API Service implements RESTful API
+    This is the second description
+  title: Sample API Service
+  version: "2.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Generate access token for the authenticated user
+      parameters:
+      - description: please fill in the username and password
+        in: body
+        name: credential
+        schema:
+          $ref: '#/definitions/auth.LoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK response
+          schema:
+            $ref: '#/definitions/httputil.Response'
+        "400":
+          description: bad request (incorrect credential, duplicate username, etc)
+          schema:
+            $ref: '#/definitions/httputil.ErrResponse'
+        "412":
+          description: error response
+          schema:
+            $ref: '#/definitions/httputil.ErrResponse'
+      summary: This API authenticates user login
+      tags:
+      - auth
+  /public/service-id:
+    get:
+      consumes:
+      - application/json
+      description: Tells the service ID of this service.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: api response
+          schema:
+            $ref: '#/definitions/httputil.Response'
+      summary: This API can be used as health check for this application
+      tags:
+      - public
+swagger: "2.0"

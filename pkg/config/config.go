@@ -28,6 +28,8 @@ type Http struct {
 	Address        string        `mapstructure:"address"`
 	Port           int           `mapstructure:"port"`
 	RequestTimeout time.Duration `mapstructure:"requestTimeout"`
+	ReadTimeout    time.Duration `mapstructure:"readTimeout"`
+	WriteTimeout   time.Duration `mapstructure:"writeTimeout"`
 	HttpClientTLS  bool          `mapstructure:"httpClientTLS"`
 }
 

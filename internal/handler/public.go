@@ -20,6 +20,13 @@ func PublicHandler(serviceId string) http.Handler {
 }
 
 // getServiceId gets serviceId
+// @Summary 	This API can be used as health check for this application
+// @Description Tells the service ID of this service.
+// @Tags 		public
+// @Accept  	json
+// @Produce  	json
+// @Success 	200 {object} httputil.Response "api response"
+// @Router 		/public/service-id [get]
 func getServiceId(serviceId string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = httputil.WriteResponse(w, httputil.SuccessResponse, &httputil.Response{

@@ -45,6 +45,16 @@ func AuthHandler(cfg *config.Config, log *logger.Logger, tokenAuth *jwtauth.JWTA
 }
 
 // authLogin processes the request to create access token
+// @Summary 	This API authenticates user login
+// @Description Generate access token for the authenticated user
+// @Tags 		auth
+// @Accept  	json
+// @Produce  	json
+// @Param 		credential body auth.LoginData false "please fill in the username and password"
+// @Success 	200 {object} httputil.Response "OK response"
+// @Failure 	412 {object} httputil.ErrResponse "error response"
+// @Failure 	400 {object} httputil.ErrResponse "bad request (incorrect credential, duplicate username, etc)"
+// @Router 		/auth/login [post]
 func (h *handler) authLogin() func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var errMsg *string
