@@ -88,6 +88,7 @@ Reference and programming instructional materials.
 
 ``` 
         swag init -g cmd/main/main.go
+        swag init --parseDependency -g cmd/api/main.go
 ```
 
 If your `main.go` file is not in root but uses the models defined in root, you can provide the path of `main.go` file.

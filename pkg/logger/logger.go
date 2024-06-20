@@ -66,6 +66,8 @@ func SetLogger(l *Logger) func(next http.Handler) http.Handler {
 					zap.Duration("lat", time.Since(t1)),
 					zap.Int("status", ww.Status()),
 					zap.Int("size", ww.BytesWritten()),
+					zap.String("latencyStr", (time.Since(t1)).String()),
+					zap.Duration("latencyDuration", time.Since(t1)),
 					zap.String("reqId", middleware.GetReqID(r.Context())))
 			}()
 

@@ -3,25 +3,28 @@
 package router
 
 import (
-	"github.com/ardihikaru/go-chi-example-part-1/internal/application"
-	"github.com/ardihikaru/go-chi-example-part-1/internal/handler"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	"github.com/ardihikaru/go-chi-example-part-1/internal/application"
+	"github.com/ardihikaru/go-chi-example-part-1/internal/handler"
+
+	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
 )
 
 // GetRouter configures a chi router and starts the http server
-// @title          API Service
-// @description    API Service
-// @contact.name   Muhammad Febrian Ardiansyah
-// @contact.email  mfardiansyah.id@gmail.com
-// @BasePath       /
 func GetRouter(deps *application.Dependencies) *chi.Mux {
 	r := chi.NewRouter()
 
 	if deps.Log != nil {
 		r.Use(logger.SetLogger(deps.Log))
 	}
+
+	//// a good base middleware stack
+	//r.Use(middleware.RequestID)
+	//r.Use(middleware.RealIP)
+	//r.Use(middleware.Logger)
 
 	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
 	r.Use(cors.Handler(cors.Options{
@@ -40,6 +43,9 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 }
 
 func buildTree(r *chi.Mux, deps *application.Dependencies) {
+	// handles swagger route
+	r.Mount("/swagger", httpSwagger.WrapHandler)
+
 	// handles service related route(s)
 	r.Mount("/public", handler.PublicHandler(deps.SvcId))
 
