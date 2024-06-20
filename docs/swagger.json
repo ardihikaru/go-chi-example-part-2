@@ -9,7 +9,6 @@
         },
         "version": "2.0"
     },
-    "basePath": "/",
     "paths": {
         "/auth/login": {
             "post": {
@@ -115,6 +114,13 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
