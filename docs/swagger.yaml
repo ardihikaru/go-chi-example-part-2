@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   auth.LoginData:
     properties:
@@ -77,4 +76,9 @@ paths:
       summary: This API can be used as health check for this application
       tags:
       - public
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

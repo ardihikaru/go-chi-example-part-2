@@ -21,13 +21,16 @@ import (
 // Version sets the default build version
 var Version = "development"
 
-// @title          Sample API Service
-// @version 	   2.0
-// @description    Sample API Service implements RESTful API
-// @description    This is the second description
-// @contact.name   Muhammad Febrian Ardiansyah
-// @contact.email  mfardiansyah.id@gmail.com
-// @BasePath       /
+// @title          				Sample API Service
+// @version 	   				2.0
+// @description    				Sample API Service implements RESTful API
+// @description    				This is the second description
+// @contact.name   				Muhammad Febrian Ardiansyah
+// @contact.email  				mfardiansyah.id@gmail.com
+// @securityDefinitions.apikey 	BearerAuth
+// @in 							header
+// @name 						Authorization
+// @BasePath       				/
 func main() {
 	// loads config
 	cfg, err := config.Get()

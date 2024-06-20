@@ -123,6 +123,13 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -130,7 +137,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Sample API Service",
 	Description:      "Sample API Service implements RESTful API\nThis is the second description",
