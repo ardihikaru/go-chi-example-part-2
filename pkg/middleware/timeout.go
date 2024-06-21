@@ -51,12 +51,3 @@ func (res *Resource) Timeout(timeout time.Duration) func(next http.Handler) http
 		return http.HandlerFunc(fn)
 	}
 }
-
-// TimeoutHandler returns 503 when having a timeout
-//
-//	in current case, Timeout() is a better approach to use
-func (res *Resource) TimeoutHandler(timeout time.Duration) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.TimeoutHandler(next, timeout, "Timeout.")
-	}
-}

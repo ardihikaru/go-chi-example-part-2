@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/go-chi/chi"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi"
 
 	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-1/pkg/utils/http"
@@ -14,16 +15,10 @@ func PublicHandler(serviceId string, log *logger.Logger) http.Handler {
 	//func PublicHandler(serviceId string, log *logger.Logger, timeout time.Duration) http.Handler {
 	r := chi.NewRouter()
 
-	//// builds middleware
-	//thSvc := timeouthandler.NewService(log)
-	//mw := middleware.NewMiddleware(thSvc)
-
 	r.Route("/", func(r chi.Router) {
 		r.HandleFunc("/service-id", getServiceId(serviceId)) // GET /roles - Read a list of users.
 
 		r.Route("/with-sleep", func(r chi.Router) {
-			//r.Use(mw.Timeout(timeout)) // returns 504
-			//r.Use(mw.TimeoutHandler(timeout)) // returns 503
 			r.HandleFunc("/", getResponseWithSleep(log)) // GET /roles - Read a list of users.
 		})
 

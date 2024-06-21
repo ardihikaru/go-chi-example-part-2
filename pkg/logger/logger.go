@@ -16,7 +16,9 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
+	"github.com/ardihikaru/go-chi-example-part-1/pkg/config"
 	enum "github.com/ardihikaru/go-chi-example-part-1/pkg/enum/channel"
+	"github.com/ardihikaru/go-chi-example-part-1/pkg/enum/loglevel"
 	mw "github.com/ardihikaru/go-chi-example-part-1/pkg/middleware"
 )
 
@@ -32,6 +34,7 @@ const (
 type Logger struct {
 	*zap.Logger
 	logHttpRequest bool
+	cfg            config.LogPublisher
 	publisher      publisher
 }
 
@@ -48,8 +51,6 @@ type params struct {
 	Method        *string        `json:"method"`
 	Path          *string        `json:"path"`
 	Message       *string        `json:"msg"`
-	Status        *int           `json:"status"`
-	Size          *int           `json:"size"`
 	LatencyInStr  *string        `json:"latency_in_str"`
 	LatencyInTime *time.Duration `json:"latency_in_time"`
 }
@@ -76,7 +77,7 @@ func init() {
 }
 
 // New creates a new Logger with given logLevel and logFormat as part of a permanent field of the logger.
-func New(logLevel, logFormat string, logHttpRequest bool) (*Logger, error) {
+func New(logLevel, logFormat string, logHttpRequest bool, cfg config.LogPublisher) (*Logger, error) {
 	if logFormat == logFormatText {
 		logFormat = logFormatConsole
 	}
@@ -99,7 +100,7 @@ func New(logLevel, logFormat string, logHttpRequest bool) (*Logger, error) {
 
 	zap.ReplaceGlobals(logger)
 
-	return &Logger{Logger: logger, logHttpRequest: logHttpRequest}, nil
+	return &Logger{Logger: logger, logHttpRequest: logHttpRequest, cfg: cfg}, nil
 }
 
 // getRequestId is a middleware that injects a request ID into the context of each
@@ -128,20 +129,17 @@ func SetLogger(logger *Logger) func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 
-			logParams := buildParams(r, time.Now(), ww)
+			logParams := buildParams(r, time.Now())
 			defer func() {
-				logger.Info("served request",
+				logger.Notice("served request",
 					zap.String("proto", *logParams.Proto),
 					zap.String("method", *logParams.Method),
 					zap.String("path", *logParams.Path),
-					zap.Int("status", *logParams.Status),
-					zap.Int("size", *logParams.Size),
+					zap.Int("status", ww.Status()),
+					zap.Int("size", ww.BytesWritten()),
 					zap.Duration("lat", *logParams.LatencyInTime),
 					zap.String("latStr", *logParams.LatencyInStr),
 					zap.String("reqId", getRequestId(r)))
-
-				// when log publisher exists, publish log to the designated channel
-				logger.publishLog(logParams)
 			}()
 
 			next.ServeHTTP(ww, r)
@@ -151,9 +149,7 @@ func SetLogger(logger *Logger) func(next http.Handler) http.Handler {
 }
 
 // buildParams builds log parameters
-func buildParams(r *http.Request, timeNow time.Time, ww middleware.WrapResponseWriter) *params {
-	status := ww.Status()
-	size := ww.BytesWritten()
+func buildParams(r *http.Request, timeNow time.Time) *params {
 	latency := time.Since(timeNow)
 	latencyStr := (time.Since(timeNow)).String()
 	message := "served request"
@@ -167,16 +163,91 @@ func buildParams(r *http.Request, timeNow time.Time, ww middleware.WrapResponseW
 		Method:        &r.Method,
 		Path:          &r.URL.Path,
 		Message:       &message,
-		Status:        &status,
-		Size:          &size,
 		LatencyInStr:  &latencyStr,
 		LatencyInTime: &latency,
 		RequestId:     &requestId,
 	}
 }
 
+// Notice wraps console message log in info level
+func (logger *Logger) Notice(msg string, field ...zap.Field) {
+	logger.Logger.Info(msg, field...)
+
+	// when log publisher exists, publish log to the designated channel
+	// FYI: ALWAYS enabled
+	if logger.cfg.Notice {
+		logger.publishLog(toMap(loglevel.Notice, msg, field))
+	}
+}
+
+// Info wraps console message log in info level
+func (logger *Logger) Info(msg string, field ...zap.Field) {
+	logger.Logger.Info(msg, field...)
+
+	// when log publisher exists, publish log to the designated channel
+	// FYI: maybe disabled
+	if logger.cfg.Info {
+		logger.publishLog(toMap(loglevel.Info, msg, field))
+	}
+}
+
+// Warn wraps console message log in warn level
+func (logger *Logger) Warn(msg string, field ...zap.Field) {
+	logger.Logger.Warn(msg, field...)
+
+	// when log publisher exists, publish log to the designated channel
+	// FYI: maybe disabled
+	if logger.cfg.Warn {
+		logger.publishLog(toMap(loglevel.Warn, msg, field))
+	}
+}
+
+// Error wraps console message log in error level
+func (logger *Logger) Error(msg string, field ...zap.Field) {
+	logger.Logger.Error(msg, field...)
+
+	// when log publisher exists, publish log to the designated channel
+	// FYI: ALWAYS enabled
+	if logger.cfg.Error {
+		logger.publishLog(toMap(loglevel.Error, msg, field))
+	}
+}
+
+// Debug wraps console message log in debug mode
+func (logger *Logger) Debug(msg string, field ...zap.Field) {
+	logger.Logger.Debug(msg, field...)
+
+	// when log publisher exists, publish log to the designated channel
+	// FYI: maybe disabled
+	if logger.cfg.Debug {
+		logger.publishLog(toMap(loglevel.Debug, msg, field))
+	}
+}
+
+// toMap casts zap.Field into a map
+func toMap(logLevel, msg string, fields []zap.Field) map[string]interface{} {
+	zapAsMap := make(map[string]interface{})
+	zapAsMap["message"] = msg
+	zapAsMap["level"] = logLevel
+
+	if fields != nil {
+		for _, field := range fields {
+			if field.Integer != 0 {
+				zapAsMap[field.Key] = field.Key
+			} else if field.Interface != nil {
+				zapAsMap[field.Key] = field.Interface
+			} else {
+				// default
+				zapAsMap[field.Key] = field.String
+			}
+		}
+	}
+
+	return zapAsMap
+}
+
 // publishLog publishes log
-func (logger *Logger) publishLog(logParams *params) {
+func (logger *Logger) publishLog(logData map[string]interface{}) {
 	if !logger.logHttpRequest {
 		// do nothing here
 		logger.Debug("FYI: log publication is currently disabled. Do not log the request activity")
@@ -195,7 +266,7 @@ func (logger *Logger) publishLog(logParams *params) {
 
 	logger.Debug("publishing the captured log ...")
 
-	responseBytes, err := json.Marshal(logParams)
+	responseBytes, err := json.Marshal(logData)
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to convert log params to bytes: %s", err))
 

@@ -27,13 +27,7 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 	thSvc := timeouthandler.NewService(deps.Log)
 	mw := middleware.NewMiddleware(thSvc)
 
-	// a good base middleware stack
-	//r.Use(middleware.RequestID)
-	//r.Use(middleware.RealIP)
-	//r.Use(middleware.Logger)
-
 	r.Use(mw.Timeout(deps.Cfg.Http.WriteTimeout)) // returns 504
-	//r.Use(mw.TimeoutHandler(timeout)) // returns 503
 
 	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
 	r.Use(cors.Handler(cors.Options{
@@ -56,8 +50,6 @@ func buildTree(r *chi.Mux, deps *application.Dependencies) {
 	r.Mount("/swagger", httpSwagger.WrapHandler)
 
 	// handles service related route(s)
-	//r.Mount("/public", handler.PublicHandler(deps.SvcId, deps.Log, deps.Cfg.Http.Timeout))
-	//r.Mount("/public", handler.PublicHandler(deps.SvcId, deps.Log, deps.Cfg.Http.WriteTimeout))
 	r.Mount("/public", handler.PublicHandler(deps.SvcId, deps.Log))
 
 	// handles auth related route(s)

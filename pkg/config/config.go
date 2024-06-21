@@ -24,6 +24,14 @@ type Log struct {
 	Format string `mapstructure:"format"`
 }
 
+type LogPublisher struct {
+	Notice bool `mapstructure:"notice"`
+	Error  bool `mapstructure:"error"`
+	Info   bool `mapstructure:"info"`
+	Warn   bool `mapstructure:"warn"`
+	Debug  bool `mapstructure:"debug"`
+}
+
 type Http struct {
 	Address        string        `mapstructure:"address"`
 	Port           int           `mapstructure:"port"`
@@ -53,11 +61,12 @@ type JwtAuth struct {
 }
 
 type Config struct {
-	General General `mapstructure:"general"`
-	Log     Log     `mapstructure:"log"`
-	Http    Http    `mapstructure:"http"`
-	Cors    Cors    `mapstructure:"cors"`
-	JwtAuth JwtAuth `mapstructure:"jwtAuth"`
+	General      General      `mapstructure:"general"`
+	Log          Log          `mapstructure:"log"`
+	LogPublisher LogPublisher `mapstructure:"logPublisher"`
+	Http         Http         `mapstructure:"http"`
+	Cors         Cors         `mapstructure:"cors"`
+	JwtAuth      JwtAuth      `mapstructure:"jwtAuth"`
 }
 
 // Validate validates any miss configurations or missing configs
