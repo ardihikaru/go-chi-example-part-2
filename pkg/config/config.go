@@ -28,9 +28,10 @@ type Http struct {
 	Address        string        `mapstructure:"address"`
 	Port           int           `mapstructure:"port"`
 	RequestTimeout time.Duration `mapstructure:"requestTimeout"`
-	ReadTimeout    time.Duration `mapstructure:"readTimeout"`
-	WriteTimeout   time.Duration `mapstructure:"writeTimeout"`
+	ReadTimeout    time.Duration `mapstructure:"readTimeout"`  // The maximum time to wait while writing data to the server
+	WriteTimeout   time.Duration `mapstructure:"writeTimeout"` // The maximum time to wait while reading data from the server
 	HttpClientTLS  bool          `mapstructure:"httpClientTLS"`
+	LogHttpRequest bool          `mapstructure:"logHttpRequest"`
 }
 
 // Cors defines cors-related configurations
