@@ -12,7 +12,11 @@ http:
   address: 0.0.0.0
   port: 8080
   requestTimeout: 600s
+  readTimeout: 1s
+  writeTimeout: 1s
   httpClientTLS: false
+  # when logHttpRequest is enabled, we need to implement the publisher service that implements the prepared interface
+  logHttpRequest: false
 
 # untuk CORS
 cors:

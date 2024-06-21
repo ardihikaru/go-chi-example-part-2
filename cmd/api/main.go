@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// configures logger
-	log, err := logger.New(cfg.Log.Level, cfg.Log.Format)
+	log, err := logger.New(cfg.Log.Level, cfg.Log.Format, cfg.Http.LogHttpRequest, cfg.LogPublisher)
 	if err != nil {
 		e.FatalOnError(err, "failed to prepare the logger")
 	}
