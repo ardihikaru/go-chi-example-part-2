@@ -4,6 +4,7 @@ package router
 
 import (
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger"
 
@@ -21,8 +22,8 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 		r.Use(logger.SetLogger(deps.Log))
 	}
 
-	//// a good base middleware stack
-	//r.Use(middleware.RequestID)
+	// a good base middleware stack
+	r.Use(middleware.RequestID)
 	//r.Use(middleware.RealIP)
 	//r.Use(middleware.Logger)
 
