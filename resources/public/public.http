@@ -1,4 +1,8 @@
-### get service ID
+### get service ID with request ID
 GET {{base_url}}/public/service-id
 Content-Type: application/json
 X-Request-Id: t546546454645
+
+### get service ID without request ID
+GET {{base_url}}/public/service-id
+Content-Type: application/json
