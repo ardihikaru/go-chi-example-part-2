@@ -1,11 +1,11 @@
 package application
 
 import (
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/authenticator"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/config"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/jwtauth"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
-	e "github.com/ardihikaru/go-chi-example-part-1/pkg/utils/error"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/authenticator"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/config"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	e "github.com/ardihikaru/go-chi-example-part-2/pkg/utils/error"
 )
 
 // getTokenAuthentication creates an authentication token from the authenticator

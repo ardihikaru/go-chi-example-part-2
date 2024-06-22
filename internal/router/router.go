@@ -7,12 +7,12 @@ import (
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger"
 
-	"github.com/ardihikaru/go-chi-example-part-1/internal/application"
-	"github.com/ardihikaru/go-chi-example-part-1/internal/handler"
-	"github.com/ardihikaru/go-chi-example-part-1/internal/service/timeouthandler"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/application"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/handler"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/service/timeouthandler"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/middleware"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
 )
 
 // GetRouter configures a chi router and starts the http server

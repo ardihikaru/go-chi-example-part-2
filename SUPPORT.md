@@ -5,13 +5,13 @@
 <img src="https://img.shields.io/badge/%20Licence-MIT-green.svg?style=flat-square" alt="license" />
 </p>
 <p align="center">
-<a href="https://github.com/ardihikaru/go-chi-example-part-1/blob/master/CODE_OF_CONDUCT.md">
+<a href="https://github.com/ardihikaru/go-chi-example-part-2/blob/master/CODE_OF_CONDUCT.md">
 <img src="https://img.shields.io/badge/Community-Code%20of%20Conduct-orange.svg?style=flat-squre" alt="Code of Conduct" />
 </a>
-<a href="https://github.com/ardihikaru/go-chi-example-part-1/blob/master/SUPPORT.md">
+<a href="https://github.com/ardihikaru/go-chi-example-part-2/blob/master/SUPPORT.md">
 <img src="https://img.shields.io/badge/Community-Support-red.svg?style=flat-square" alt="Support" />
 </a>
-<a href="https://github.com/ardihikaru/go-chi-example-part-1/blob/master/CONTRIBUTING.md">
+<a href="https://github.com/ardihikaru/go-chi-example-part-2/blob/master/CONTRIBUTING.md">
 <img src="https://img.shields.io/badge/%20Community-Contribution-yellow.svg?style=flat-square" alt="Contribution" />
 </a>
 </p>

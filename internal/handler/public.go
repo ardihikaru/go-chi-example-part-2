@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/utils/http"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/utils/http"
 )
 
 // PublicHandler handle public routes

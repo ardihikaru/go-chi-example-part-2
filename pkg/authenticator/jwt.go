@@ -5,7 +5,7 @@ import (
 	"github.com/lestrrat-go/jwx/jwa"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/jwtauth"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
 )
 
 // JWTClaims is the data type of claims in Encode() function (jwtauth.go)
