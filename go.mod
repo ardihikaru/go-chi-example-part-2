@@ -1,4 +1,4 @@
-module github.com/ardihikaru/go-chi-example-part-1
+module github.com/ardihikaru/go-chi-example-part-2
 
 go 1.20
 

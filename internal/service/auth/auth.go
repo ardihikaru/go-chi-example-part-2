@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/authenticator"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/jwtauth"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/authenticator"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"time"
 )
 
