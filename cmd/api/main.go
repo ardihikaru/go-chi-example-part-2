@@ -9,13 +9,13 @@ import (
 
 	"go.uber.org/zap"
 
-	_ "github.com/ardihikaru/go-chi-example-part-1/docs"
-	"github.com/ardihikaru/go-chi-example-part-1/internal/application"
-	"github.com/ardihikaru/go-chi-example-part-1/internal/router"
+	_ "github.com/ardihikaru/go-chi-example-part-2/docs"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/application"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/router"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/config"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
-	e "github.com/ardihikaru/go-chi-example-part-1/pkg/utils/error"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/config"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	e "github.com/ardihikaru/go-chi-example-part-2/pkg/utils/error"
 )
 
 // Version sets the default build version

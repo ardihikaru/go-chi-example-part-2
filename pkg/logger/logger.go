@@ -16,10 +16,10 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/config"
-	enum "github.com/ardihikaru/go-chi-example-part-1/pkg/enum/channel"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/enum/loglevel"
-	mw "github.com/ardihikaru/go-chi-example-part-1/pkg/middleware"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/config"
+	enum "github.com/ardihikaru/go-chi-example-part-2/pkg/enum/channel"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/enum/loglevel"
+	mw "github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
 )
 
 var prefix string
