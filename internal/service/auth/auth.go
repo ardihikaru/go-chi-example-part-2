@@ -1,10 +1,11 @@
 package auth
 
 import (
+	"time"
+
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/authenticator"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
-	"time"
 )
 
 const (
