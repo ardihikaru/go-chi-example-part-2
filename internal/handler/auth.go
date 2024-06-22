@@ -5,12 +5,12 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/ardihikaru/go-chi-example-part-1/internal/service/auth"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/service/auth"
 
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/config"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/jwtauth"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
-	"github.com/ardihikaru/go-chi-example-part-1/pkg/utils/http"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/config"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/utils/http"
 )
 
 // handler defines the struct to wrap handlers

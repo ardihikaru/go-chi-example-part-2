@@ -1,6 +1,6 @@
 package timeouthandler
 
-import "github.com/ardihikaru/go-chi-example-part-1/pkg/logger"
+import "github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 
 type Service struct {
 	log *logger.Logger
