@@ -10,16 +10,20 @@ import (
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/utils/http"
 )
 
+type publicHandler struct{}
+
 // PublicHandler handle public routes
 func PublicHandler(serviceId string, log *logger.Logger) http.Handler {
 	//func PublicHandler(serviceId string, log *logger.Logger, timeout time.Duration) http.Handler {
 	r := chi.NewRouter()
 
+	controller := publicHandler{}
+
 	r.Route("/", func(r chi.Router) {
-		r.HandleFunc("/service-id", getServiceId(serviceId)) // GET /roles - Read a list of users.
+		r.HandleFunc("/service-id", controller.getServiceId(serviceId)) // GET /roles - Read a list of users.
 
 		r.Route("/with-sleep", func(r chi.Router) {
-			r.HandleFunc("/", getResponseWithSleep(log)) // GET /roles - Read a list of users.
+			r.HandleFunc("/", controller.getResponseWithSleep(log)) // GET /roles - Read a list of users.
 		})
 
 	})
@@ -35,7 +39,7 @@ func PublicHandler(serviceId string, log *logger.Logger) http.Handler {
 // @Produce  	json
 // @Success 	200 {object} httputil.Response "api response"
 // @Router 		/public/service-id [get]
-func getServiceId(serviceId string) func(http.ResponseWriter, *http.Request) {
+func (h *publicHandler) getServiceId(serviceId string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = httputil.WriteResponse(w, httputil.SuccessResponse, &httputil.Response{
 			Data:       serviceId,
@@ -53,7 +57,7 @@ func getServiceId(serviceId string) func(http.ResponseWriter, *http.Request) {
 // @Produce  	json
 // @Success 	200 {object} httputil.Response "api response"
 // @Router 		/public/with-sleep [get]
-func getResponseWithSleep(log *logger.Logger) func(http.ResponseWriter, *http.Request) {
+func (h *publicHandler) getResponseWithSleep(log *logger.Logger) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// adds sleep for 2 seconds
 		// here, we expect that the api service will ONLY respond after 2 seconds of delay,
