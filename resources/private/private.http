@@ -1,0 +1,5 @@
+### get service ID with request ID
+GET {{base_url}}/private/service-id
+Content-Type: application/json
+X-Request-Id: privateLoh
+Authorization: Bearer {{access_token}}

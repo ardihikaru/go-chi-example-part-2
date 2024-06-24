@@ -1,9 +1,16 @@
-package timeouthandler
+package middlewareutility
 
 import "github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 
 type Service struct {
 	log *logger.Logger
+}
+
+// NewService creates a new timeout handler service
+func NewService(log *logger.Logger) *Service {
+	return &Service{
+		log: log,
+	}
 }
 
 func (s Service) LogInfo(msg string) {
@@ -22,9 +29,7 @@ func (s Service) LogDebug(msg string) {
 	s.log.Debug(msg)
 }
 
-// NewService creates a new timeout handler service
-func NewService(log *logger.Logger) *Service {
-	return &Service{
-		log: log,
-	}
+func (s Service) EnforcePolicy(sub, obj, act string) error {
+
+	return nil
 }

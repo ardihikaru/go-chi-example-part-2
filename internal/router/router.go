@@ -9,7 +9,8 @@ import (
 
 	"github.com/ardihikaru/go-chi-example-part-2/internal/application"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/handler"
-	"github.com/ardihikaru/go-chi-example-part-2/internal/service/timeouthandler"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/service/middlewareutility"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/service/session"
 
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
@@ -24,8 +25,9 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 	}
 
 	// builds middleware
-	thSvc := timeouthandler.NewService(deps.Log)
-	mw := middleware.NewMiddleware(thSvc)
+	thSvc := middlewareutility.NewService(deps.Log)
+	sessionSvc := session.NewService(deps.Log)
+	mw := middleware.NewMiddleware(thSvc, sessionSvc)
 
 	r.Use(mw.Timeout(deps.Cfg.Http.WriteTimeout)) // returns 504
 
@@ -49,8 +51,11 @@ func buildTree(r *chi.Mux, deps *application.Dependencies) {
 	// handles swagger route
 	r.Mount("/swagger", httpSwagger.WrapHandler)
 
-	// handles service related route(s)
+	// handles public related route(s)
 	r.Mount("/public", handler.PublicHandler(deps.SvcId, deps.Log))
+
+	// handles private related route(s)
+	r.Mount("/private", handler.PrivateHandler(deps.SvcId, deps.Log, deps.TokenAuth))
 
 	// handles auth related route(s)
 	r.Mount("/auth", handler.AuthHandler(deps.Cfg, deps.Log, deps.TokenAuth))

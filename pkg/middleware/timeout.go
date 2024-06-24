@@ -31,14 +31,14 @@ import (
 //	})
 //
 // FYI: it adopted: https://github.com/go-chi/chi/blob/master/middleware/timeout.go
-func (res *Resource) Timeout(timeout time.Duration) func(next http.Handler) http.Handler {
+func (rs *Resource) Timeout(timeout time.Duration) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			ctx, cancel := context.WithTimeout(r.Context(), timeout)
 			defer func() {
 				cancel()
 				if ctx.Err() == context.DeadlineExceeded {
-					res.utility.LogDebug("got a request timeout")
+					rs.utility.LogDebug("got a request timeout")
 					w.WriteHeader(http.StatusGatewayTimeout)
 
 					return
