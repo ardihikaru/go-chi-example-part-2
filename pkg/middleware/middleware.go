@@ -1,6 +1,10 @@
 package middleware
 
-import "net/http"
+import (
+	"net/http"
+
+	"go.uber.org/zap/zapcore"
+)
 
 const (
 	RequestId = "X-Request-Id"
@@ -8,11 +12,8 @@ const (
 
 // utility provides the interface for the functionality of logger.Logger and any other common utility
 type utility interface {
-	LogInfo(msg string)
-	LogWarn(msg string)
-	LogError(msg string)
-	LogDebug(msg string)
-	EnforcePolicy(sub, obj, act string) error
+	AuthorizeAccess(resourceCode string, act string) func(next http.Handler) http.Handler
+	Log(level zapcore.Level, msg string)
 }
 
 // session provides the interface for the functionality of session handler for the authentication

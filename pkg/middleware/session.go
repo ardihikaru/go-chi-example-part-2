@@ -7,6 +7,7 @@ const (
 	SessionKey = "session"
 )
 
+// SessionCtx authorizes session credential
 func (rs *Resource) SessionCtx(next http.Handler) http.Handler {
 	return rs.session.SessionCtx(next)
 }

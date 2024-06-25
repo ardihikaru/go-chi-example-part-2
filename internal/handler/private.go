@@ -4,11 +4,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/developersismedika/sqlx"
 	"github.com/go-chi/chi"
 
+	eRs "github.com/ardihikaru/go-chi-example-part-2/internal/enum/resource"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/service/middlewareutility"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/service/session"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/storage/resourcerolemap"
 
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/enforcer"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
@@ -20,14 +24,17 @@ type privateHandler struct {
 }
 
 // PrivateHandler handle private routes
-func PrivateHandler(serviceId string, log *logger.Logger, tokenAuth *jwtauth.JWTAuth) http.Handler {
-	//func PublicHandler(serviceId string, log *logger.Logger, timeout time.Duration) http.Handler {
+func PrivateHandler(serviceId string, log *logger.Logger, tokenAuth *jwtauth.JWTAuth,
+	enforcerPolicy *enforcer.Enforcer, db *sqlx.DB) http.Handler {
 	r := chi.NewRouter()
 
+	// builds resource group storage
+	rsRoleStorage := &resourcerolemap.Storage{Db: db, Log: log}
+
 	// initializes session middleware resource
-	thSvc := middlewareutility.NewService(log)
+	mwUtilSvc := middlewareutility.NewService(log, enforcerPolicy, rsRoleStorage)
 	sessionSvc := session.NewService(log)
-	mw := middleware.NewMiddleware(thSvc, sessionSvc)
+	mw := middleware.NewMiddleware(mwUtilSvc, sessionSvc)
 
 	controller := privateHandler{log: log}
 
@@ -38,9 +45,11 @@ func PrivateHandler(serviceId string, log *logger.Logger, tokenAuth *jwtauth.JWT
 		// validates token. Got invalids if (expired, missing)
 		r.Use(jwtauth.Authenticator)
 
-		// extracts the id on the URL parameter
+		// extracts the session on the URL parameter
 		r.Use(mw.SessionCtx)
 
+		// authorizes access control
+		r.Use(mw.AuthorizeAccess(eRs.User, "read"))
 		r.HandleFunc("/service-id", controller.getServiceId(serviceId)) // GET /roles - Read a list of users.
 	})
 

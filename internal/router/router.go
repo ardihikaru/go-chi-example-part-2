@@ -11,6 +11,7 @@ import (
 	"github.com/ardihikaru/go-chi-example-part-2/internal/handler"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/service/middlewareutility"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/service/session"
+	"github.com/ardihikaru/go-chi-example-part-2/internal/storage/resourcerolemap"
 
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
@@ -24,10 +25,13 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 		r.Use(logger.SetLogger(deps.Log))
 	}
 
+	// builds resource group storage
+	rsRoleStorage := &resourcerolemap.Storage{Db: deps.Db, Log: deps.Log}
+
 	// builds middleware
-	thSvc := middlewareutility.NewService(deps.Log)
+	mwUtilSvc := middlewareutility.NewService(deps.Log, deps.Enforcer, rsRoleStorage)
 	sessionSvc := session.NewService(deps.Log)
-	mw := middleware.NewMiddleware(thSvc, sessionSvc)
+	mw := middleware.NewMiddleware(mwUtilSvc, sessionSvc)
 
 	r.Use(mw.Timeout(deps.Cfg.Http.WriteTimeout)) // returns 504
 
@@ -55,7 +59,7 @@ func buildTree(r *chi.Mux, deps *application.Dependencies) {
 	r.Mount("/public", handler.PublicHandler(deps.SvcId, deps.Log))
 
 	// handles private related route(s)
-	r.Mount("/private", handler.PrivateHandler(deps.SvcId, deps.Log, deps.TokenAuth))
+	r.Mount("/private", handler.PrivateHandler(deps.SvcId, deps.Log, deps.TokenAuth, deps.Enforcer, deps.Db))
 
 	// handles auth related route(s)
 	r.Mount("/auth", handler.AuthHandler(deps.Cfg, deps.Log, deps.TokenAuth))

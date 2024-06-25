@@ -19,15 +19,18 @@ const (
 type Session struct {
 	AccountId string `json:"account_id"`
 	UserEmail string `json:"user_email"`
+	UserId    string `json:"user_id"`
 	Username  string `json:"username"`
+	Role      string `json:"role"`
 	Name      string `json:"name"`
 }
 
 // ClaimUser defines the claim user
 type ClaimUser struct {
-	Id        string `json:"id"`
+	UserId    string `json:"user_id"`
 	AccountId string `json:"account_id"`
 	Username  string `json:"username"`
+	Role      string `json:"role"`
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 }
@@ -68,8 +71,10 @@ func (svc *Service) SessionCtx(next http.Handler) http.Handler {
 
 		// extracts
 		session := Session{
+			UserId:    user.UserId,
 			AccountId: user.AccountId,
 			Username:  user.Username,
+			Role:      user.Role,
 			Name:      user.Name,
 		}
 

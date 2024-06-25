@@ -45,14 +45,16 @@ func NewService(log *logger.Logger, jwtExpTime int, tokenAuth *jwtauth.JWTAuth) 
 	}
 }
 
+// Authorize authorizes user credential
 func (svc *Service) Authorize(loginData LoginData) (*Token, error) {
 	// TODO: implements code here
 
 	claimUser := session.ClaimUser{
-		Id:        "uid3333",
+		UserId:    "1",
 		AccountId: "id123",
 		Username:  "user",
 		Name:      "Ini Budi",
+		Role:      "administrator", // dummy value
 		Email:     "user@email.com",
 	}
 
@@ -76,7 +78,9 @@ func (svc *Service) Authorize(loginData LoginData) (*Token, error) {
 		Session: session.Session{
 			AccountId: "id123",
 			UserEmail: "user@email.com",
+			UserId:    "1",
 			Username:  "user",
+			Role:      "administrator", // dummy value
 			Name:      "Ini Budi",
 		},
 	}
