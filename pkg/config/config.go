@@ -60,6 +60,21 @@ type JwtAuth struct {
 	JWTExpiredInSec int                    `mapstructure:"jwtExpiredInSec"`
 }
 
+// DbMySQL defines the database connection for MySQL database
+type DbMySQL struct {
+	Host   string `mapstructure:"host"`
+	Port   string `mapstructure:"port"`
+	User   string `mapstructure:"user"`
+	Pass   string `mapstructure:"pass"`
+	DbName string `mapstructure:"dbName"`
+}
+
+// Enforcer defines the enforcer configuration
+type Enforcer struct {
+	ModelFile string `mapstructure:"modelFile"`
+	TableName string `mapstructure:"tableName"`
+}
+
 type Config struct {
 	General      General      `mapstructure:"general"`
 	Log          Log          `mapstructure:"log"`
@@ -67,6 +82,8 @@ type Config struct {
 	Http         Http         `mapstructure:"http"`
 	Cors         Cors         `mapstructure:"cors"`
 	JwtAuth      JwtAuth      `mapstructure:"jwtAuth"`
+	DbMySQL      DbMySQL      `mapstructure:"dbMysql"`
+	Enforcer     Enforcer     `mapstructure:"enforcer"`
 }
 
 // Validate validates any miss configurations or missing configs

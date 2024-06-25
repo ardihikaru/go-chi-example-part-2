@@ -3,8 +3,12 @@ module github.com/ardihikaru/go-chi-example-part-2
 go 1.20
 
 require (
+	github.com/casbin/casbin/v2 v2.97.0
+	github.com/developersismedika/casbin-sqlx-adapter v0.0.0-20240624090352-d334318e64f6
+	github.com/developersismedika/sqlx v0.0.0-20240205120607-2859f4085da4
 	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-chi/cors v1.2.1
+	github.com/go-sql-driver/mysql v1.7.1
 	github.com/google/uuid v1.6.0
 	github.com/lestrrat-go/jwx v1.2.29
 	github.com/spf13/viper v1.19.0
@@ -16,6 +20,7 @@ require (
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/casbin/govaluate v1.1.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect

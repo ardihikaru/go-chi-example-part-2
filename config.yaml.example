@@ -42,3 +42,17 @@ jwtAuth:
   jwtSecret: secret
   jwtAlgorithm: HS256
   jwtExpiredInSec: 36000000
+
+# untuk database MySQL
+dbMySQL:
+  host: 44.22.148.11
+  #  port: 3306
+  port: 33060
+  user: root
+  pass: ur-db-password
+  dbName: rest_with_casbin_ardi
+
+# untuk RBAC (menggunakan casbin)
+enforcer:
+  modelFile: config/rbac_model.conf
+  tableName: casbin_rule

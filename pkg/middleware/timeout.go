@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"time"
+
+	"go.uber.org/zap/zapcore"
 )
 
 // Timeout is a middleware that cancels ctx after a given timeout and return
@@ -38,7 +40,7 @@ func (rs *Resource) Timeout(timeout time.Duration) func(next http.Handler) http.
 			defer func() {
 				cancel()
 				if ctx.Err() == context.DeadlineExceeded {
-					rs.utility.LogDebug("got a request timeout")
+					rs.utility.Log(zapcore.DebugLevel, "got a request timeout")
 					w.WriteHeader(http.StatusGatewayTimeout)
 
 					return
