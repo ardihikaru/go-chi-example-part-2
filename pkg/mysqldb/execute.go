@@ -3,32 +3,93 @@ package mysqldb
 import (
 	"database/sql"
 	"fmt"
+	"time"
+
+	"github.com/developersismedika/sqlx"
 )
 
-// Exec executes a single query with a transaction
-func (d *Storage) Exec(qArgs QueryArgs) error {
+// Queryx executes query
+func (d *Storage) Queryx(query string, args interface{}) (*sqlx.Rows, error) {
 	var err error
+	var rows *sqlx.Rows
+	start := time.Now()
+
+	if args == nil {
+		rows, err = d.Db.Queryx(query)
+	} else {
+		rows, err = d.Db.Queryx(query, args)
+	}
+
+	// TODO: publish if exists
+
+	// logs query execution times
+	d.Log.Debug(fmt.Sprintf("Scan Execution took %s", time.Since(start)))
+
+	return rows, err
+}
+
+// Exec executes a single query with a transaction
+func (d *Storage) Exec(query string, args interface{}) (*sql.Result, error) {
+	var err error
+	start := time.Now()
 
 	tx := d.Db.MustBegin()
 
-	exec, err := tx.NamedExec(qArgs.Query, qArgs.Args)
+	rslt, err := tx.Exec(query, args)
 	if err != nil {
-		d.Log.Warn(fmt.Sprintf("query execution failed. rolling back the changes"))
+		d.Log.Warn(fmt.Sprintf("query execution failed. rolling back the changes: %s", err.Error()))
 		_ = tx.Rollback()
 
-		return err
+		return nil, err
 	}
 
 	// debug only: print results
-	d.insertOnePrint(exec)
+	d.insertOnePrint(rslt)
 
 	err = tx.Commit()
 	if err != nil {
 		_ = tx.Rollback()
-		return err
+		return nil, err
 	}
 
-	return nil
+	// TODO: publish if exists
+
+	// logs query execution times
+	d.Log.Debug(fmt.Sprintf("Scan Execution took %s", time.Since(start)))
+
+	return &rslt, nil
+}
+
+// NamedExec executes a single query with a transaction
+func (d *Storage) NamedExec(qArgs QueryArgs) (*sql.Result, error) {
+	var err error
+	start := time.Now()
+
+	tx := d.Db.MustBegin()
+
+	rslt, err := tx.NamedExec(qArgs.Query, qArgs.Args)
+	if err != nil {
+		d.Log.Warn(fmt.Sprintf("query execution failed. rolling back the changes: %s", err.Error()))
+		_ = tx.Rollback()
+
+		return nil, err
+	}
+
+	// debug only: print results
+	d.insertOnePrint(rslt)
+
+	err = tx.Commit()
+	if err != nil {
+		_ = tx.Rollback()
+		return nil, err
+	}
+
+	// TODO: publish if exists
+
+	// logs query execution times
+	d.Log.Debug(fmt.Sprintf("Scan Execution took %s", time.Since(start)))
+
+	return &rslt, nil
 }
 
 // ExecMany executes multiple queries with a transaction
@@ -55,6 +116,8 @@ func (d *Storage) ExecMany(qArgsList []QueryArgs) error {
 		_ = tx.Rollback()
 		return err
 	}
+
+	// TODO: publish if exists
 
 	return nil
 }

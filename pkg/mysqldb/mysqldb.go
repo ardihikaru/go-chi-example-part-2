@@ -8,6 +8,7 @@ import (
 
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/config"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/rabbitmq/interface"
 )
 
 const (
@@ -21,8 +22,9 @@ const (
 )
 
 type Storage struct {
-	Db  *sqlx.DB
-	Log *logger.Logger
+	Db        *sqlx.DB
+	Log       *logger.Logger
+	publisher rmqinterface.Publisher
 }
 
 // DbQuery defines the query parameter
