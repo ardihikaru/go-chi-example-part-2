@@ -10,7 +10,9 @@ const (
 	table = "resource_role_map"
 )
 
-type Storage mysqldb.Storage
+type Storage struct {
+	*mysqldb.Storage
+}
 type statement mysqldb.DbQuery
 
 // ResourceRoleMap is the table property

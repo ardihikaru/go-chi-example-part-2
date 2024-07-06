@@ -20,6 +20,7 @@ import (
 	enum "github.com/ardihikaru/go-chi-example-part-2/pkg/enum/channel"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/enum/loglevel"
 	mw "github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
+	rmqinterface "github.com/ardihikaru/go-chi-example-part-2/pkg/rabbitmq/interface"
 )
 
 var prefix string
@@ -35,7 +36,7 @@ type Logger struct {
 	*zap.Logger
 	logHttpRequest bool
 	cfg            config.LogPublisher
-	publisher      publisher
+	publisher      rmqinterface.Publisher
 }
 
 // params defines log parameters

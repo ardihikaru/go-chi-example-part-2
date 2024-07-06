@@ -9,12 +9,13 @@ import (
 
 	"github.com/ardihikaru/go-chi-example-part-2/internal/application"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/handler"
-	"github.com/ardihikaru/go-chi-example-part-2/internal/service/middlewareutility"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/service/session"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/storage/resourcerolemap"
 
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/mysqldb"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/service/middlewareutility"
 )
 
 // GetRouter configures a chi router and starts the http server
@@ -26,7 +27,9 @@ func GetRouter(deps *application.Dependencies) *chi.Mux {
 	}
 
 	// builds resource group storage
-	rsRoleStorage := &resourcerolemap.Storage{Db: deps.Db, Log: deps.Log}
+	rsRoleStorage := &resourcerolemap.Storage{
+		Storage: &mysqldb.Storage{Db: deps.Db, Log: deps.Log},
+	}
 
 	// builds middleware
 	mwUtilSvc := middlewareutility.NewService(deps.Log, deps.Enforcer, rsRoleStorage)

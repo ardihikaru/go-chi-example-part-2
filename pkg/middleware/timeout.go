@@ -41,7 +41,7 @@ func (rs *Resource) Timeout(timeout time.Duration) func(next http.Handler) http.
 				cancel()
 				if ctx.Err() == context.DeadlineExceeded {
 					rs.utility.Log(zapcore.DebugLevel, "got a request timeout")
-					w.WriteHeader(http.StatusGatewayTimeout)
+					http.Error(w, http.StatusText(http.StatusGatewayTimeout), http.StatusGatewayTimeout)
 
 					return
 				}

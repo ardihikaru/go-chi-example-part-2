@@ -8,14 +8,15 @@ import (
 	"github.com/go-chi/chi"
 
 	eRs "github.com/ardihikaru/go-chi-example-part-2/internal/enum/resource"
-	"github.com/ardihikaru/go-chi-example-part-2/internal/service/middlewareutility"
-	"github.com/ardihikaru/go-chi-example-part-2/internal/service/session"
 	"github.com/ardihikaru/go-chi-example-part-2/internal/storage/resourcerolemap"
 
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/enforcer"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/jwtauth"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/logger"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/middleware"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/mysqldb"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/service/middlewareutility"
+	"github.com/ardihikaru/go-chi-example-part-2/pkg/service/session"
 	"github.com/ardihikaru/go-chi-example-part-2/pkg/utils/http"
 )
 
@@ -29,7 +30,9 @@ func PrivateHandler(serviceId string, log *logger.Logger, tokenAuth *jwtauth.JWT
 	r := chi.NewRouter()
 
 	// builds resource group storage
-	rsRoleStorage := &resourcerolemap.Storage{Db: db, Log: log}
+	rsRoleStorage := &resourcerolemap.Storage{
+		Storage: &mysqldb.Storage{Db: db, Log: log},
+	}
 
 	// initializes session middleware resource
 	mwUtilSvc := middlewareutility.NewService(log, enforcerPolicy, rsRoleStorage)
@@ -50,7 +53,7 @@ func PrivateHandler(serviceId string, log *logger.Logger, tokenAuth *jwtauth.JWT
 
 		// authorizes access control
 		r.Use(mw.AuthorizeAccess(eRs.User, "read"))
-		r.HandleFunc("/service-id", controller.getServiceId(serviceId)) // GET /roles - Read a list of users.
+		r.HandleFunc("/service-id", controller.getServiceId(serviceId))
 	})
 
 	return r
